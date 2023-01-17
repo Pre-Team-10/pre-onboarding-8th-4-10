@@ -20,6 +20,9 @@ export const commentsSlice = createSlice({
     addNewComment: (state, { payload: newComment }: { payload: IComment }) => {
       state.unshift(newComment);
     },
+    deleteComment: (state, { payload: targetId }: { payload: number }) => {
+      return state.filter((comment) => comment.id !== targetId);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -32,6 +35,6 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { addNewComment } = commentsSlice.actions;
+export const { addNewComment, deleteComment } = commentsSlice.actions;
 
 export default commentsSlice.reducer;

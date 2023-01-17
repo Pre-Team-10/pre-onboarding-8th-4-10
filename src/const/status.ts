@@ -1,3 +1,4 @@
 export const STATUS = {
-  OK: 201,
+  POST_OK: 201,
+  CHANGE_OK: 200,
 } as const;
