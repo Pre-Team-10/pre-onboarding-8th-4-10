@@ -51,7 +51,7 @@ function CommentList() {
     <>
       {data.map((comment) => (
         <Comment key={comment.id}>
-          <img src={comment.profile_url} alt="" />
+          <img src={comment.profile_url} alt={comment.profile_url} />
 
           {comment.author}
 
