@@ -2,34 +2,56 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { commentApiManager } from "../apis/apis";
 import { deleteComment } from "../store/commentsSlice";
-import { Button, Comment, Content, CreatedAt } from "../styles/styles";
+import {
+  Button,
+  Comment,
+  CommentContainer,
+  Content,
+  CreatedAt,
+} from "../styles/styles";
 import { IComment } from "../types/types";
 
-function CommentList({ comments }: { comments: Array<IComment> }) {
+export const NUM_OF_COMMENTS_PER_SINGLE_PAGE = 4;
+
+function CommentList({
+  comments,
+  nowPage,
+  setNowPage,
+}: {
+  comments: Array<IComment>;
+  nowPage: number;
+  setNowPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const dispatch = useDispatch();
   const handleOnDeleteButtonClick = async (targetId: number) => {
     const isDeleteSuccessful = await commentApiManager.deleteComment(targetId);
-    if (isDeleteSuccessful) dispatch(deleteComment(targetId));
+    if (isDeleteSuccessful) {
+      dispatch(deleteComment(targetId));
+      setNowPage(0);
+    }
   };
+  const SLICED_POINT = nowPage * NUM_OF_COMMENTS_PER_SINGLE_PAGE;
   return (
-    <>
-      {comments.map((comment) => (
-        <Comment key={comment.id}>
-          <img src={comment.profile_url} alt={comment.profile_url} />
-          {comment.author}
-          <CreatedAt>{comment.createdAt}</CreatedAt>
-          <Content>{comment.content}</Content>
-          <Button>
-            <button>수정</button>
-            &nbsp;
-            <button onClick={() => handleOnDeleteButtonClick(comment.id)}>
-              삭제
-            </button>
-          </Button>
-          <hr />
-        </Comment>
-      ))}
-    </>
+    <CommentContainer>
+      {comments
+        .slice(SLICED_POINT, SLICED_POINT + NUM_OF_COMMENTS_PER_SINGLE_PAGE)
+        .map((comment) => (
+          <Comment key={comment.id}>
+            <img src={comment.profile_url} alt={comment.profile_url} />
+            {comment.author}
+            <CreatedAt>{comment.createdAt}</CreatedAt>
+            <Content>{comment.content}</Content>
+            <Button>
+              <button>수정</button>
+              &nbsp;
+              <button onClick={() => handleOnDeleteButtonClick(comment.id)}>
+                삭제
+              </button>
+            </Button>
+            <hr />
+          </Comment>
+        ))}
+    </CommentContainer>
   );
 }
 

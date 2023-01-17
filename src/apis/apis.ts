@@ -34,33 +34,30 @@ class CommentApiManager implements ICommentApiManager {
   }
 
   async postNewComment(newComment: IComment) {
-    let isPostSuccessful = false;
     try {
       const { status } = await CommentApiManager.commentAxios.post(
         END_POINTS.postComments,
         newComment,
       );
-      if (status === STATUS.POST_OK) isPostSuccessful = true;
-      else throw new Error();
+      if (status === STATUS.POST_OK) return true;
+      throw new Error();
     } catch (e) {
       // TODO: show error toast
+      return false;
     }
-    return isPostSuccessful;
   }
 
   async deleteComment(commentId: number) {
-    let isDeleteSuccessful = false;
     try {
       const { status } = await CommentApiManager.commentAxios.delete(
         `${END_POINTS.deleteComments}/${commentId}`,
       );
-      console.log(status);
-      if (status === STATUS.CHANGE_OK) isDeleteSuccessful = true;
-      else throw new Error();
+      if (status === STATUS.CHANGE_OK) return true;
+      throw new Error();
     } catch (e) {
       // TODO: show error toast
+      return false;
     }
-    return isDeleteSuccessful;
   }
 }
 

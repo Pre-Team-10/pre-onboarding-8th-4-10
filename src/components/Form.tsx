@@ -4,7 +4,13 @@ import { commentApiManager } from "../apis/apis";
 import { addNewComment } from "../store/commentsSlice";
 import { FormStyle } from "../styles/styles";
 
-function Form({ lastCommentId }: { lastCommentId: number }) {
+function Form({
+  lastCommentId,
+  setNowPage,
+}: {
+  lastCommentId: number;
+  setNowPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const dispatch = useDispatch();
   const urlInputRef = useRef<HTMLInputElement>(null);
   const authorInputRef = useRef<HTMLInputElement>(null);
@@ -33,6 +39,7 @@ function Form({ lastCommentId }: { lastCommentId: number }) {
         contentCurrent.value = "";
         ceatedAtCurrent.value = "";
         dispatch(addNewComment(newComment));
+        setNowPage(0);
       }
     }
   };

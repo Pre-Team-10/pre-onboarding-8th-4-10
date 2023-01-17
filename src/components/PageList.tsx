@@ -1,36 +1,28 @@
 import React from "react";
-import styled from "styled-components";
+import { Page, PageListStyle } from "../styles/styles";
 
-const PageListStyle = styled.div`
-  margin-bottom: 20px;
-  text-align: center;
-`;
-
-const Page = styled.button<{ active: boolean }>`
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border: 1px solid lightgray;
-  ${({ active }) =>
-    active &&
-    `
-        background: gray;
-        color: #fff;
-  `}
-  margin-right: 3px;
-`;
-
-function PageList() {
+function PageList({
+  numberOfPages,
+  nowPage,
+  setNowPage,
+}: {
+  numberOfPages: number;
+  nowPage: number;
+  setNowPage: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const pageArray = [];
-
-  pageArray.push(
-    // 임시로 페이지 하나만 설정했습니다.
-    <Page key="1" active>
-      1
-    </Page>,
-  );
-
+  for (let i = 0; i < numberOfPages; i += 1) {
+    const page = i + 1;
+    pageArray.push(
+      <Page
+        key={page}
+        active={page === nowPage + 1}
+        onClick={() => setNowPage(i)}
+      >
+        {page}
+      </Page>,
+    );
+  }
   return <PageListStyle>{pageArray}</PageListStyle>;
 }
 
