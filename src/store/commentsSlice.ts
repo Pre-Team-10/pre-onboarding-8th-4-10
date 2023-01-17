@@ -23,6 +23,15 @@ export const commentsSlice = createSlice({
     deleteComment: (state, { payload: targetId }: { payload: number }) => {
       return state.filter((comment) => comment.id !== targetId);
     },
+    modifyComment: (
+      state,
+      { payload: modifiedComment }: { payload: IComment },
+    ) => {
+      const targetCommentIndex = state.findIndex(
+        (comment) => comment.id === modifiedComment.id,
+      );
+      state.splice(targetCommentIndex, 1, modifiedComment);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -35,6 +44,7 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { addNewComment, deleteComment } = commentsSlice.actions;
+export const { addNewComment, deleteComment, modifyComment } =
+  commentsSlice.actions;
 
 export default commentsSlice.reducer;

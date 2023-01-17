@@ -1,48 +1,75 @@
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { commentApiManager } from "../apis/apis";
-import { addNewComment } from "../store/commentsSlice";
-import { FormStyle } from "../styles/styles";
+import { addNewComment, modifyComment } from "../store/commentsSlice";
+import { FormStyle, LightGrayButton } from "../styles/styles";
+import { IComment } from "../types/types";
 
 function Form({
   lastCommentId,
+  targetComment,
   setNowPage,
+  setTargetComment,
 }: {
   lastCommentId: number;
+  targetComment: IComment | undefined;
   setNowPage: React.Dispatch<React.SetStateAction<number>>;
+  setTargetComment: React.Dispatch<React.SetStateAction<IComment | undefined>>;
 }) {
   const dispatch = useDispatch();
   const urlInputRef = useRef<HTMLInputElement>(null);
   const authorInputRef = useRef<HTMLInputElement>(null);
   const contentInputRef = useRef<HTMLTextAreaElement>(null);
   const createdAtInputRef = useRef<HTMLInputElement>(null);
+  const urlCurrent = urlInputRef.current;
+  const authorCurrent = authorInputRef.current;
+  const contentCurrent = contentInputRef.current;
+  const ceatedAtCurrent = createdAtInputRef.current;
+  const isAllInputsNotNull =
+    urlCurrent && authorCurrent && contentCurrent && ceatedAtCurrent;
   const handleOnFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const urlCurrent = urlInputRef.current;
-    const authorCurrent = authorInputRef.current;
-    const contentCurrent = contentInputRef.current;
-    const ceatedAtCurrent = createdAtInputRef.current;
-    if (urlCurrent && authorCurrent && contentCurrent && ceatedAtCurrent) {
+    if (isAllInputsNotNull) {
+      const makeAllInputsVacant = () => {
+        urlCurrent.value = "";
+        authorCurrent.value = "";
+        contentCurrent.value = "";
+        ceatedAtCurrent.value = "";
+      };
       const newComment = {
         profile_url: urlCurrent.value,
         author: authorCurrent.value,
         content: contentCurrent.value,
         createdAt: ceatedAtCurrent.value,
-        id: lastCommentId + 1,
+        id: targetComment?.id || lastCommentId + 1,
       };
-      const isPostSuccessful = await commentApiManager.postNewComment(
-        newComment,
-      );
-      if (isPostSuccessful) {
-        urlCurrent.value = "";
-        authorCurrent.value = "";
-        contentCurrent.value = "";
-        ceatedAtCurrent.value = "";
-        dispatch(addNewComment(newComment));
-        setNowPage(0);
+      if (targetComment) {
+        const isModifySuccessful = await commentApiManager.modifyComment(
+          newComment,
+        );
+        if (isModifySuccessful) {
+          makeAllInputsVacant();
+          dispatch(modifyComment(newComment));
+          setTargetComment(undefined);
+        }
+      } else {
+        const isPostSuccessful = await commentApiManager.postNewComment(
+          newComment,
+        );
+        if (isPostSuccessful) {
+          makeAllInputsVacant();
+          dispatch(addNewComment(newComment));
+          setNowPage(0);
+        }
       }
     }
   };
+  if (targetComment && isAllInputsNotNull) {
+    urlCurrent.value = targetComment.profile_url;
+    authorCurrent.value = targetComment.author;
+    contentCurrent.value = targetComment.content;
+    ceatedAtCurrent.value = targetComment.createdAt;
+  }
   return (
     <FormStyle>
       <form onSubmit={handleOnFormSubmit}>
@@ -76,7 +103,7 @@ function Form({
           ref={createdAtInputRef}
         />
         <br />
-        <button type="submit">등록</button>
+        <LightGrayButton type="submit">등록</LightGrayButton>
       </form>
     </FormStyle>
   );

@@ -15,12 +15,6 @@ export const FormStyle = styled.div`
     width: 98%;
     margin-bottom: 10px;
   }
-  & > form > button {
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem;
-    border: 1px solid lightgray;
-    cursor: pointer;
-  }
 `;
 
 export const Comment = styled.div`
@@ -76,4 +70,11 @@ export const Page = styled.button<{ active: boolean }>`
 
 export const CommentContainer = styled.div`
   min-height: 600px;
+`;
+
+export const LightGrayButton = styled.button`
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  border: 1px solid lightgray;
+  cursor: pointer;
 `;

@@ -1,12 +1,15 @@
 import axios, { Axios } from "axios";
+import { toast } from "react-toastify";
 import END_POINTS from "../const/endPoints";
-import { STATUS } from "../const/status";
+import ERROR_DESCS from "../const/errorDescs";
+import SERVER_STATUS from "../const/status";
 import { IComment } from "../types/types";
 
 interface ICommentApiManager {
   fetchAllComments: () => Promise<Array<IComment> | null>;
   postNewComment: (newComment: IComment) => Promise<boolean>;
   deleteComment: (commentId: number) => Promise<boolean>;
+  modifyComment: (newComment: IComment) => Promise<boolean>;
 }
 
 class CommentApiManager implements ICommentApiManager {
@@ -20,6 +23,10 @@ class CommentApiManager implements ICommentApiManager {
     });
   }
 
+  private static showErrorToast(errorDesc: string) {
+    toast.error(errorDesc);
+  }
+
   async fetchAllComments() {
     try {
       const { data: fetchAllComments } =
@@ -28,7 +35,7 @@ class CommentApiManager implements ICommentApiManager {
         );
       return fetchAllComments.reverse();
     } catch (e) {
-      // TODO: show error toast
+      CommentApiManager.showErrorToast(ERROR_DESCS.fetchError);
       return null;
     }
   }
@@ -39,10 +46,10 @@ class CommentApiManager implements ICommentApiManager {
         END_POINTS.postComments,
         newComment,
       );
-      if (status === STATUS.POST_OK) return true;
+      if (status === SERVER_STATUS.POST_OK) return true;
       throw new Error();
     } catch (e) {
-      // TODO: show error toast
+      CommentApiManager.showErrorToast(ERROR_DESCS.postError);
       return false;
     }
   }
@@ -52,10 +59,24 @@ class CommentApiManager implements ICommentApiManager {
       const { status } = await CommentApiManager.commentAxios.delete(
         `${END_POINTS.deleteComments}/${commentId}`,
       );
-      if (status === STATUS.CHANGE_OK) return true;
+      if (status === SERVER_STATUS.CHANGE_OK) return true;
       throw new Error();
     } catch (e) {
-      // TODO: show error toast
+      CommentApiManager.showErrorToast(ERROR_DESCS.deleteError);
+      return false;
+    }
+  }
+
+  async modifyComment(modifiedComment: IComment) {
+    try {
+      const { status } = await CommentApiManager.commentAxios.put(
+        `${END_POINTS.putComments}/${modifiedComment.id}`,
+        modifiedComment,
+      );
+      if (status === SERVER_STATUS.CHANGE_OK) return true;
+      throw new Error();
+    } catch (e) {
+      CommentApiManager.showErrorToast(ERROR_DESCS.modifyError);
       return false;
     }
   }

@@ -8,6 +8,7 @@ import {
   CommentContainer,
   Content,
   CreatedAt,
+  LightGrayButton,
 } from "../styles/styles";
 import { IComment } from "../types/types";
 
@@ -17,17 +18,24 @@ function CommentList({
   comments,
   nowPage,
   setNowPage,
+  setTargetComment,
 }: {
   comments: Array<IComment>;
   nowPage: number;
   setNowPage: React.Dispatch<React.SetStateAction<number>>;
+  setTargetComment: React.Dispatch<React.SetStateAction<IComment | undefined>>;
 }) {
   const dispatch = useDispatch();
   const handleOnDeleteButtonClick = async (targetId: number) => {
-    const isDeleteSuccessful = await commentApiManager.deleteComment(targetId);
-    if (isDeleteSuccessful) {
-      dispatch(deleteComment(targetId));
-      setNowPage(0);
+    const deleteConfirm = window.confirm("정말 삭제하시겠습니까?");
+    if (deleteConfirm) {
+      const isDeleteSuccessful = await commentApiManager.deleteComment(
+        targetId,
+      );
+      if (isDeleteSuccessful) {
+        dispatch(deleteComment(targetId));
+        setNowPage(0);
+      }
     }
   };
   const SLICED_POINT = nowPage * NUM_OF_COMMENTS_PER_SINGLE_PAGE;
@@ -42,11 +50,15 @@ function CommentList({
             <CreatedAt>{comment.createdAt}</CreatedAt>
             <Content>{comment.content}</Content>
             <Button>
-              <button>수정</button>
+              <LightGrayButton onClick={() => setTargetComment(comment)}>
+                수정
+              </LightGrayButton>
               &nbsp;
-              <button onClick={() => handleOnDeleteButtonClick(comment.id)}>
+              <LightGrayButton
+                onClick={() => handleOnDeleteButtonClick(comment.id)}
+              >
                 삭제
-              </button>
+              </LightGrayButton>
             </Button>
             <hr />
           </Comment>

@@ -7,11 +7,15 @@ import Form from "../components/Form";
 import PageList from "../components/PageList";
 import { fetchAllComments } from "../store/commentsSlice";
 import { RootState } from "../store/store";
+import { IComment } from "../types/types";
 
 function CommentListContainer() {
   const comments = useSelector((state: RootState) => state.comments);
   const dispatch = useDispatch();
   const [nowPage, setNowPage] = useState(0);
+  const [targetComment, setTargetComment] = useState<IComment | undefined>(
+    undefined,
+  );
   useEffect(() => {
     dispatch(fetchAllComments());
   }, [dispatch]);
@@ -25,13 +29,19 @@ function CommentListContainer() {
         comments={comments}
         nowPage={nowPage}
         setNowPage={setNowPage}
+        setTargetComment={setTargetComment}
       />
       <PageList
         numberOfPages={numberOfPages}
         nowPage={nowPage}
         setNowPage={setNowPage}
       />
-      <Form lastCommentId={lastCommentId} setNowPage={setNowPage} />
+      <Form
+        lastCommentId={lastCommentId}
+        targetComment={targetComment}
+        setNowPage={setNowPage}
+        setTargetComment={setTargetComment}
+      />
     </div>
   );
 }
