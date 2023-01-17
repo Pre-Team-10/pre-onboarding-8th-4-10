@@ -1,9 +1,11 @@
 import axios, { Axios } from "axios";
 import END_POINTS from "../const/endPoints";
+import { STATUS } from "../const/status";
 import { IComment } from "../types/types";
 
 interface ICommentApiManager {
-  fetchAllComments: () => Promise<Array<IComment>>;
+  fetchAllComments: () => Promise<Array<IComment> | null>;
+  postNewComment: (newComment: IComment) => Promise<boolean>;
 }
 
 class CommentApiManager implements ICommentApiManager {
@@ -18,10 +20,33 @@ class CommentApiManager implements ICommentApiManager {
   }
 
   async fetchAllComments() {
-    const { data: fetchAllComments } = await CommentApiManager.commentAxios.get<
-      IComment[]
-    >(END_POINTS.getComments);
-    return fetchAllComments;
+    try {
+      const { data: fetchAllComments } =
+        await CommentApiManager.commentAxios.get<IComment[]>(
+          END_POINTS.getComments,
+        );
+      return fetchAllComments.reverse();
+    } catch (e) {
+      // TODO: show error toast
+      return null;
+    }
+  }
+
+  async postNewComment(newComment: IComment) {
+    let isPostSuccessful = false;
+    try {
+      const { status } = await CommentApiManager.commentAxios.post(
+        END_POINTS.postComments,
+        newComment,
+      );
+      if (status === STATUS.OK) isPostSuccessful = true;
+      else throw new Error();
+    } catch (e) {
+      console.log(e);
+      // TODO: show error toast
+      isPostSuccessful = false;
+    }
+    return isPostSuccessful;
   }
 }
 

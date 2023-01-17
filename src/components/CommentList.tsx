@@ -42,18 +42,14 @@ function CommentList({ comments }: { comments: Array<IComment> }) {
       {comments.map((comment) => (
         <Comment key={comment.id}>
           <img src={comment.profile_url} alt={comment.profile_url} />
-
           {comment.author}
-
           <CreatedAt>{comment.createdAt}</CreatedAt>
-
           <Content>{comment.content}</Content>
-
           <Button>
-            <span>수정</span>
-            <span>삭제</span>
+            <button>수정</button>
+            &nbsp;
+            <button>삭제</button>
           </Button>
-
           <hr />
         </Comment>
       ))}

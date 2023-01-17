@@ -17,17 +17,21 @@ export const commentsSlice = createSlice({
   name: "comments",
   initialState,
   reducers: {
-    foo: () => {
-      return [];
+    addNewComment: (state, { payload: newComment }: { payload: IComment }) => {
+      state.unshift(newComment);
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAllComments.fulfilled, (state, { payload }) => {
-      return payload;
-    });
+    builder.addCase(
+      fetchAllComments.fulfilled,
+      (state, { payload: fetchedAllComments }) => {
+        if (fetchedAllComments) return fetchedAllComments;
+        return [];
+      },
+    );
   },
 });
 
-export const { foo } = commentsSlice.actions;
+export const { addNewComment } = commentsSlice.actions;
 
 export default commentsSlice.reducer;
