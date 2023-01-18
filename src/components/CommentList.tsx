@@ -39,30 +39,29 @@ function CommentList({
     }
   };
   const SLICED_POINT = nowPage * NUM_OF_COMMENTS_PER_SINGLE_PAGE;
+  const SLICED_END = SLICED_POINT + NUM_OF_COMMENTS_PER_SINGLE_PAGE;
   return (
     <CommentContainer>
-      {comments
-        .slice(SLICED_POINT, SLICED_POINT + NUM_OF_COMMENTS_PER_SINGLE_PAGE)
-        .map((comment) => (
-          <Comment key={comment.id}>
-            <img src={comment.profile_url} alt={comment.profile_url} />
-            {comment.author}
-            <CreatedAt>{comment.createdAt}</CreatedAt>
-            <Content>{comment.content}</Content>
-            <Button>
-              <LightGrayButton onClick={() => setTargetComment(comment)}>
-                수정
-              </LightGrayButton>
-              &nbsp;
-              <LightGrayButton
-                onClick={() => handleOnDeleteButtonClick(comment.id)}
-              >
-                삭제
-              </LightGrayButton>
-            </Button>
-            <hr />
-          </Comment>
-        ))}
+      {comments.slice(SLICED_POINT, SLICED_END).map((comment) => (
+        <Comment key={comment.id}>
+          <img src={comment.profile_url} alt={comment.profile_url} />
+          {comment.author}
+          <CreatedAt>{comment.createdAt}</CreatedAt>
+          <Content>{comment.content}</Content>
+          <Button>
+            <LightGrayButton onClick={() => setTargetComment(comment)}>
+              수정
+            </LightGrayButton>
+            &nbsp;
+            <LightGrayButton
+              onClick={() => handleOnDeleteButtonClick(comment.id)}
+            >
+              삭제
+            </LightGrayButton>
+          </Button>
+          <hr />
+        </Comment>
+      ))}
     </CommentContainer>
   );
 }

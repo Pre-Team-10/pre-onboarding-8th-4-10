@@ -50,18 +50,18 @@
       "id": 7
     },
     {
-      "id": 8,
       "profile_url": "https://picsum.photos/id/8/50/50",
       "author": "abc_8",
-      "content": "Typescript 배워 보려고 합니다. 어떻게 배우는게 빠를까요",
-      "createdAt": "2022-03-08"
+      "content": "Typescript 배워 보려고 합니다. 어떻게 배우는게 빠를까요?\n",
+      "createdAt": "2022-03-08",
+      "id": 8
     },
     {
-      "id": 9,
       "profile_url": "https://picsum.photos/id/9/50/50",
       "author": "abc_9",
-      "content": "컴포넌트 테스트는 어떻게 하나요.",
-      "createdAt": "2022-03-09"
+      "content": "컴포넌트 테스트는 어떻게 하나요?",
+      "createdAt": "2022-03-09",
+      "id": 9
     },
     {
       "profile_url": "https://picsum.photos/id/10/50/50",
