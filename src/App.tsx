@@ -1,14 +1,13 @@
 import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import CommentListContainer from "./containers/CommentListContainer";
-import PageListContainer from "./containers/PageListContainer";
-import FormContainer from "./containers/FormContainer";
 
 function App() {
   return (
     <div>
+      <ToastContainer pauseOnHover={false} />
       <CommentListContainer />
-      <PageListContainer />
-      <FormContainer />
     </div>
   );
 }
