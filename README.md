@@ -23,7 +23,7 @@ npm install
 npm start
 ```
 
-### api 서버 링크 및 구동 방법
+### api 서버 구동 방법
 
 ```tsx
 npm install
