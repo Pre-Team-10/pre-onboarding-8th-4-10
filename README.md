@@ -33,7 +33,7 @@ npm run api
 ### 사용한 라이브러리
 
 <div>
-  <img src="https://velog.velcdn.com/images/yoonvelog/post/f72cfecf-aad2-4012-b6ad-81efb432ab9f/redux_tookit%20로고.png" />
+  <img src="https://img.shields.io/badge/redux-4B32C3?style=for-the-badge&logo=redux&logoColor=white" />
   <img src="https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" />
   <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white" />
 	<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white" />
